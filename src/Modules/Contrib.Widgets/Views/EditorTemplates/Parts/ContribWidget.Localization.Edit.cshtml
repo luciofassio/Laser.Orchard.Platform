@@ -1,0 +1,13 @@
+﻿@{
+    Script.Require("JQuery").AtHead();
+}
+
+@using (Script.Head()) {
+    if (!String.IsNullOrWhiteSpace(Model)) {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Localization_SelectedCulture").val("@Model");
+        });
+    </script>
+    }
+}

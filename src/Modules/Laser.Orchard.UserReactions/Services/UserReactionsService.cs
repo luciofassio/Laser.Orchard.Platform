@@ -175,13 +175,13 @@ namespace Laser.Orchard.UserReactions.Services {
 
             int newPriority = userRT.UserReactionsType.Count + 1;
             foreach (var type in Enum.GetNames(typeof(ReactionsNames))) {
-                if(userRT.UserReactionsType.FirstOrDefault(x => x.TypeName == type) == null) {
+                if (userRT.UserReactionsType.FirstOrDefault(x => x.TypeName == type) == null) {
                     userRT.UserReactionsType.Add(new UserReactionsTypeVM {
-                         Id = 0,
-                         Activating = false,
-                         Delete = false,
-                         Priority = newPriority,
-                         TypeName = type
+                        Id = 0,
+                        Activating = false,
+                        Delete = false,
+                        Priority = newPriority,
+                        TypeName = type
                     });
                     newPriority++;
                 }
@@ -246,6 +246,11 @@ namespace Laser.Orchard.UserReactions.Services {
             //settings type
             List<UserReactionsVM> listType = new List<UserReactionsVM>();
 
+            // if content does not exist return an empty list
+            if (part == null) {
+                return listType;
+            }
+
             /////////////////////
             //reaction type settings
             UserReactionsPartSettings settings = part.TypePartDefinition.Settings.GetModel<UserReactionsPartSettings>();
@@ -254,7 +259,7 @@ namespace Laser.Orchard.UserReactions.Services {
             List<UserReactionsSettingTypesSel> SettingType = new List<UserReactionsSettingTypesSel>();
 
             if (part.Settings.Count > 0) {
-                SettingType = new JavaScriptSerializer().Deserialize<List<UserReactionsSettingTypesSel>>(part.Settings.Values.ElementAt(1));
+                SettingType = new JavaScriptSerializer().Deserialize<List<UserReactionsSettingTypesSel>>(part.Settings["UserReactionsPartSettings.TypeReactionsPartsSelected"]);
             }
             /////////////////////////////////////////////////
 
@@ -335,34 +340,36 @@ namespace Laser.Orchard.UserReactions.Services {
             UserReactionsClickRecord res = new UserReactionsClickRecord();
             string userCookie = string.Empty;
             var part = _orchardServices.ContentManager.Get<UserReactionsPart>(CurrentPage);
-            var items = GetTot(part);
-            ReactionsUserIds reactionsCurrentUser = new ReactionsUserIds();
-            reactionsCurrentUser = GetReactionsUserIds(userId);
-            List<UserReactionsVM> newSommaryRecord = new List<UserReactionsVM>();
-            foreach (UserReactionsVM item in items) {
-                int IconType = item.TypeId;
-                //Verifica che non sia già stato eseguito un click 
-                if (reactionsCurrentUser.Id > 0) {
-                    res = GetOrderedClickTable().Where(w => w.UserReactionsTypesRecord.Id.Equals(IconType) && w.UserPartRecord.Id.Equals(reactionsCurrentUser.Id) && w.ContentItemRecordId.Equals(CurrentPage)).FirstOrDefault();
-                }
-                else {
-                    userCookie = reactionsCurrentUser.Guid;
-                    res = GetOrderedClickTable().Where(w => w.UserReactionsTypesRecord.Id.Equals(IconType) && w.UserGuid.Equals(userCookie) && w.ContentItemRecordId.Equals(CurrentPage)).FirstOrDefault();
-                }
+            if (part != null) {
+                var items = GetTot(part);
+                ReactionsUserIds reactionsCurrentUser = new ReactionsUserIds();
+                reactionsCurrentUser = GetReactionsUserIds(userId);
+                List<UserReactionsVM> newSommaryRecord = new List<UserReactionsVM>();
+                foreach (UserReactionsVM item in items) {
+                    int IconType = item.TypeId;
+                    //Verifica che non sia già stato eseguito un click 
+                    if (reactionsCurrentUser.Id > 0) {
+                        res = GetOrderedClickTable().Where(w => w.UserReactionsTypesRecord.Id.Equals(IconType) && w.UserPartRecord.Id.Equals(reactionsCurrentUser.Id) && w.ContentItemRecordId.Equals(CurrentPage)).FirstOrDefault();
+                    }
+                    else {
+                        userCookie = reactionsCurrentUser.Guid;
+                        res = GetOrderedClickTable().Where(w => w.UserReactionsTypesRecord.Id.Equals(IconType) && w.UserGuid.Equals(userCookie) && w.ContentItemRecordId.Equals(CurrentPage)).FirstOrDefault();
+                    }
 
-                if (res != null)
-                    item.Clicked = res.ActionType;
+                    if (res != null)
+                        item.Clicked = res.ActionType;
 
-                newSommaryRecord.Add(item);
+                    newSommaryRecord.Add(item);
+                }
+                result.ContentId = part.ContentItem.Id;
+                if (reactionsCurrentUser.Id != 0) {
+                    result.UserAuthenticated = true;
+                }
+                if (HasPermission(part.ContentItem.ContentType)) {
+                    result.UserAuthorized = true;
+                }
+                result.Reactions = newSommaryRecord.ToArray();
             }
-            result.ContentId = part.ContentItem.Id;
-            if (reactionsCurrentUser.Id != 0) {
-                result.UserAuthenticated = true;
-            }
-            if (HasPermission(part.ContentItem.ContentType)) {
-                result.UserAuthorized = true;
-            }
-            result.Reactions = newSommaryRecord.ToArray();
             return result;
         }
 
@@ -430,12 +437,12 @@ namespace Laser.Orchard.UserReactions.Services {
                     retVal.Id = pageId;
 
                     //solleva l'evento per il workflow
-                    _workflowManager.TriggerEvent("ReactionClicked", contentItem, () => new Dictionary<string, object> { 
+                    _workflowManager.TriggerEvent("ReactionClicked", contentItem, () => new Dictionary<string, object> {
                         { "Content", contentItem },
                         { "ReactionId", iconTypeId },
                         { "Action", actionType },
-                        { "UserEmail", currentUser.Email },
-                        { "UserId", currentUser.Id }
+                        { "UserEmail", (currentUser != null ? currentUser.Email : "") },
+                        { "UserId", (currentUser != null ? currentUser.Id : 0) }
                     });
                 }
                 catch (Exception) {
@@ -490,6 +497,15 @@ namespace Laser.Orchard.UserReactions.Services {
             }
             else if (reactionName.Equals(ReactionsNames.silent)) {
                 return T("Silent");
+            }
+            else if (reactionName.Equals(ReactionsNames.excited)) {
+                return T("Excited");
+            }
+            else if (reactionName.Equals(ReactionsNames.curious)) {
+                return T("Curious");
+            }
+            else if (reactionName.Equals(ReactionsNames.interested)) {
+                return T("Interested");
             }
             else {
                 return T("None");

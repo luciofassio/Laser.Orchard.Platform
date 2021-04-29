@@ -53,7 +53,14 @@ namespace Laser.Orchard.jQueryPlugins {
             manifest.DefineScript("jqPlotEnhancedPieLegendRenderer").SetUrl("jqPlot/plugins/jqplot.enhancedPieLegendRenderer.js").SetDependencies("jqPlot");
 
             manifest.DefineScript("jsonViewer").SetUrl("json-browse/jquery.json-browse.js").SetDependencies("jQuery");
-            manifest.DefineScript("animsition").SetCdn("https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/js/animsition.min.js","https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/js/animsition.js", true).SetDependencies("jQuery");
+            manifest.DefineScript("animsition").SetCdn("https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/js/animsition.min.js","https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/js/animsition.js").SetDependencies("jQuery");
+
+            manifest.DefineScript("Select2")
+                .SetCdn("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js")
+                .SetDependencies("jQuery");
+
+            manifest.DefineScript("ChartJS")
+                .SetCdn("https://cdn.jsdelivr.net/npm/chart.js@2.8.0");
 
             //Styles
 
@@ -81,7 +88,33 @@ namespace Laser.Orchard.jQueryPlugins {
             manifest.DefineStyle("jqPlot").SetUrl("jqPlot/jquery.jqplot.css");
             manifest.DefineStyle("jqPlot_Mini").SetUrl("jqPlot/jquery.jqplot.min.css");
             manifest.DefineStyle("jsonViewer").SetUrl("json-browse/jquery.json-browse.css");
-            manifest.DefineStyle("animsition").SetCdn("https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/css/animsition.css", "https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/css/animsition.min.css", true);
+            manifest.DefineStyle("animsition").SetCdn("https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/css/animsition.css", "https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/css/animsition.min.css");
+
+            manifest.DefineStyle("Select2")
+                .SetCdn("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css");
+
+            // Bootstrap Italia
+            manifest.DefineStyle("BootstrapItalia")
+                .SetUrl("../BootstrapItalia/css/bootstrap-italia.min.css");
+            manifest.DefineScript("BootstrapItalia")
+                .SetUrl("../BootstrapItalia/js/bootstrap-italia.bundle.min.js");
+
+            manifest.DefineScript("I18Next")
+                .SetCdn("https://unpkg.com/i18next@19.9.0/dist/umd/i18next.min.js")
+                .SetDependencies("jQuery");
+            manifest.DefineScript("PasswordStrength")
+                .SetCdn("https://cdn.jsdelivr.net/npm/pwstrength-bootstrap@3.0.9/dist/pwstrength-bootstrap.min.js")
+                .SetDependencies("jQuery");
+
+            //FullCalendar
+            manifest.DefineScript("FullCalendar")
+                .SetUrl("fullcalendar/fullcalendar-5.6.0/lib/main.min.js", "fullcalendar/fullcalendar-5.6.0/lib/main.js").SetVersion("5.6.0");
+            manifest.DefineScript("FullCalendar.Locales")
+                .SetUrl("fullcalendar/fullcalendar-5.6.0/lib/locales-all.min.js", "fullcalendar/fullcalendar-5.6.0/lib/locales-all.js").SetVersion("5.6.0")
+                .SetDependencies("FullCalendar");
+
+            manifest.DefineStyle("FullCalendar")
+                .SetUrl("fullcalendar/fullcalendar-5.6.0/main.min.css", "fullcalendar/fullcalendar-5.6.0/main.css").SetVersion("5.6.0");
 
         }
     }

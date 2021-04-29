@@ -1,10 +1,12 @@
 ﻿using Contrib.Widgets.Models;
-using Contrib.Widgets.Services;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
 using Orchard.ContentManagement.Handlers;
 using Orchard.ContentManagement.MetaData;
+using Orchard.Core.Contents.Settings;
 using Orchard.Data;
 using Orchard.Environment.Extensions;
+using System.Web.Routing;
 
 namespace Contrib.Widgets.Handlers {
     [OrchardFeature("Contrib.Widgets")]
@@ -29,10 +31,26 @@ namespace Contrib.Widgets.Handlers {
         }
 
         private void PublishWidget(UpdateContentContext context, WidgetExPart part) {
-            if (!context.ContentItem.TypeDefinition.Settings.ContainsKey("Stereotype") || context.ContentItem.TypeDefinition.Settings["Stereotype"] != "Widget")
+            if (!context.ContentItem.TypeDefinition.Settings.ContainsKey("Stereotype") || context.ContentItem.TypeDefinition.Settings["Stereotype"] != "Widget" || part.ContentItem.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable || part.ContentItem.Has<IPublishingControlAspect>())
                 return;
 
             _contentManager.Publish(part.ContentItem);
+        }
+
+        protected override void GetItemMetadata(GetContentItemMetadataContext context) {
+            var widgetExPart = context.ContentItem.As<WidgetExPart>();
+
+            if (widgetExPart == null  || widgetExPart.Host == null)
+                return;
+
+            context.Metadata.EditorRouteValues = new RouteValueDictionary {
+                {"Area", "Contrib.Widgets"},
+                {"Controller", "Admin"},
+                {"Action", "EditWidget"},
+                {"hostId", widgetExPart.Host.Id},
+                {"Id", widgetExPart.Id}
+            };
+
         }
 
         protected override void Activated(ActivatedContentContext context) {

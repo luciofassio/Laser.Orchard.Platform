@@ -1,23 +1,54 @@
-﻿<fieldset class="contentItems bulk-items">
-    @Display(Model.ContentItems)
+﻿@using System.Linq;
+@{
+    var itemsCount = 0;
+    if (Model.ContentItems != null) {
+        itemsCount = Model.ContentItems.Items.Count;
+    }
+    else if (Model.Items != null) {
+        itemsCount = Model.Items.Count;
+    }
+}
+
+<fieldset class="contentItems bulk-items">
+    @{ if (Model.ContentItems != null) {
+            @Display(Model.ContentItems)
+        }
+        else if (!string.IsNullOrEmpty(Model.ResultShape)) {
+            @Html.Partial((string)(Model.ResultShape), (object)Model.Items)
+        }
+        if (itemsCount == 0) {
+            @T("No content found. try again by changing the filters")
+        }
+    }
 </fieldset>
-@if((bool)Model.Part.Record.DisplayPager) {
+@if ((bool)Model.Part.Record.DisplayPager) {
     @Display(Model.Pager)
 }
 <script type="text/javascript">
     $(document).ready(function () {
         $("ul.pager > li > a").click(function(e){
             var url=$(this).attr('href');
-           // var url_old = "~/Modules/Laser.Orchard.ContentExtension/View/DynamicProjectionDisplay/AjaxList.cshtml";
-           // var url = '@Url.Action("AjaxList", "DynamicProjectionDisplay", new { area = "Laser.Orchard.ContentExtension"})'
             $.ajax({
                 type: "GET",
                 url: url,
-             //   data: $("#FormAjaxList").serialize(),
                 success: function (data) {
-                    $("#AjaxList").html(data);
+                    // Handle the fact that returnUrls have likely been generated using the
+                    // ajax request, hence following them is wrong.
+                    var retUrlRegex = /returnUrl=\S*AjaxList/g;
+                    var result = data.replace(retUrlRegex, function (x) {
+                        // the returnUrl should point to the List action, rather than the
+                        // one for the ajax request.
+                        return x.replace("AjaxList", "List");
+                    });
+                    $("#AjaxList").html(result);
                  }
-            });
+            }).done(function () {
+                transformPager();@*this function is defined within the file List.cshtml*@
+                $("html, body").animate({ scrollTop: $('#FormAjaxList').offset().top }, 1000); // scroll to form
+                setTimeout(function () {
+                    $("#overlay").fadeOut(300);
+                }, 500);
+            });;
             e.preventDefault();
         });
     });

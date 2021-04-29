@@ -7,6 +7,12 @@ var WidgetsContainer;
             var hostId = $(this).data("host-id");
             var form = $(this).parents("form:first");
             var fieldset = $(this).parents("fieldset:first");
+
+            var hiddenSubmitSave = $("#hiddenSubmitSave")[0];   
+            var attHSS = document.createAttribute("name");       
+            attHSS.value = "submit.Save";                           
+            hiddenSubmitSave.setAttributeNode(attHSS);   
+
             var formActionValue = fieldset.find("input[name='submit.Save']");
             var url = $(this).attr("href");
             if(hostId === 0) {
@@ -15,6 +21,7 @@ var WidgetsContainer;
                 formActionValue.val("submit.Save");
                 $("input[type='hidden'][name='returnUrl']").val(url);
             }
+
             form.submit();
         });
         $("div.widgets").on("click", "a.remove-widget", function (e) {
@@ -62,8 +69,9 @@ var WidgetsContainer;
         $("#widgetsPlacement legend").expandoControl(function (controller) {
             return controller.nextAll(".expando");
         }, {
-            collapse: true,
-            remember: true
+            collapse: false,
+            remember: true,
+            context: "widget-container" 
         });
     });
 })(WidgetsContainer || (WidgetsContainer = {}));

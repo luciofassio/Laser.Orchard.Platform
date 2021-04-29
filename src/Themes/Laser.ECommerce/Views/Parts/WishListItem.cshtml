@@ -1,16 +1,24 @@
 ﻿@using Nwazet.Commerce.Models
+@using Nwazet.Commerce.Services;
 @using Nwazet.Commerce.ViewModels
 @using System.Collections.Generic
 @using Orchard.ContentManagement
+@using Nwazet.Commerce.Extensions;
 
 @{
     Style.Include("wishlists.nwazet-commerce.css", "wishlists.nwazet-commerce.min.css");
 
     string imageUrl = (Model.ProductImage != null && Model.ProductImage.MediaParts.Count > 0) ? Model.ProductImage.MediaParts[0].MediaUrl : null;
-    var title = Model.Title
-        + (Model.ProductAttributes == null || Model.ProductAttributes.Count == 0
-                ? "" : " (" + string.Join(", ", ((Dictionary<int, ProductAttributeValueExtended>)Model.ProductAttributes).Values
-                    .Select(v => v.Value + (v.ExtensionProviderInstance != null ? v.ExtensionProviderInstance.DisplayString(v.ExtendedValue) : ""))) + ")");
+    var title = Model.Title;
+    var productAttributes = (IDictionary<int, ProductAttributeValueExtended>)Model.ProductAttributes;
+    if (productAttributes != null && productAttributes.Any()) {
+        var additionalText = 
+            AttributeNameUtilities.AttributesDisplayText(productAttributes: productAttributes, product: (IContent)Model.ContentItem, separator: ", ");
+        
+        if (!string.IsNullOrWhiteSpace(additionalText)) {
+            title += "(" + additionalText + ")";
+        }
+    }
     var unitPrice = (decimal)Model.DiscountedPrice;
     var unitPriceOriginal = (decimal)Model.OriginalPrice;
     string originalUnitPrice = "";
@@ -22,12 +30,12 @@
 }
 
 @if (!string.IsNullOrWhiteSpace(imageUrl)) {
-    <a href="@Url.ItemDisplayUrl(contentItem)" class="product-image-link">
+    <a href="@Url.ItemDisplayUrl(contentItem)" class="product-image-link" data-product-id="@contentItem.Id">
         <img src="@Display.ResizeMediaUrl(Width: 140, Height: 120, Mode: "pad", Alignment: "middlecenter", Path: imageUrl)" alt="@title" class="product-image" />
     </a>
 }
 <div>
-    <h5><a href="@Url.ItemDisplayUrl(contentItem)">@title</a></h5>
+    <h5><a href="@Url.ItemDisplayUrl(contentItem)" data-product-id="@contentItem.Id">@title</a></h5>
     <div class="price">
         @Display.Price(Price: unitPriceOriginal, DiscountedPrice: unitPrice, CurrencyProvider: Model.CurrencyProvider)
     </div>

@@ -3,6 +3,8 @@ using Contrib.Widgets.Services;
 using Contrib.Widgets.Settings;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Aspects;
+using Orchard.Core.Contents.Settings;
 using Orchard.Environment.Extensions;
 using Orchard.Localization;
 using Orchard.Logging;
@@ -44,8 +46,8 @@ namespace Contrib.Widgets.Controllers {
                 return new HttpUnauthorizedResult();
 
             _contentManager.Create(contentItem, VersionOptions.Draft);
-
             var model = _contentManager.UpdateEditor(contentItem, this);
+
             if (!ModelState.IsValid) {
                 _services.TransactionManager.Cancel();
                 return View(model);
@@ -63,10 +65,13 @@ namespace Contrib.Widgets.Controllers {
 
             var widgetsContainerPart = _contentManager.Get(hostId, VersionOptions.Latest).As<WidgetsContainerPart>();
             var settings = widgetsContainerPart.Settings.GetModel<WidgetsContainerSettings>();
-
-            if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
-                widgetTypes = widgetTypes.Where(x => settings.AllowedWidgets.Split(',').Contains(x)).ToList();
-
+            if (!settings.UseHierarchicalAssociation) {
+                if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
+                    widgetTypes = widgetTypes.Where(x => settings.AllowedWidgets.Split(',').Contains(x)).ToList();
+            } else {
+                var allowedWidgetsForZone = settings.HierarchicalAssociation.Where(x => x.ZoneName == zone).SelectMany(z=>z.Widgets.Select(w=>w.WidgetType));
+                widgetTypes = widgetTypes.Where(x => allowedWidgetsForZone.Contains(x)|| allowedWidgetsForZone.Contains("All")).ToList();
+            }
             var viewModel = _services.New.ViewModel()
                 .WidgetTypes(widgetTypes)
                 .HostId(hostId)
@@ -101,7 +106,22 @@ namespace Contrib.Widgets.Controllers {
 
         [HttpPost, ActionName("AddWidget")]
         [Orchard.Mvc.FormValueRequired("submit.Save")]
-        public ActionResult AddWidgetPost(string widgetType, int hostId) {
+        public ActionResult AddWidgetSavePOST(string widgetType, int hostId) {
+            return AddWidgetPost(widgetType, hostId, contentItem => {
+                if (!contentItem.Has<IPublishingControlAspect>() && !contentItem.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable)
+                    _services.ContentManager.Publish(contentItem);
+            });
+        }
+
+        [HttpPost, ActionName("AddWidget")]
+        [Orchard.Mvc.FormValueRequired("submit.Publish")]
+        public ActionResult AddWidgetPublishPOST(string widgetType, int hostId) {
+            return AddWidgetPost(widgetType, hostId, contentItem => _services.ContentManager.Publish(contentItem));
+        }
+
+        //[HttpPost, ActionName("AddWidget")]
+        //[Orchard.Mvc.FormValueRequired("submit.Save")]
+        public ActionResult AddWidgetPost(string widgetType, int hostId, Action<ContentItem> conditionallyPublish) {
             if (!IsAuthorizedToManageWidgets())
                 return new HttpUnauthorizedResult();
 
@@ -109,7 +129,7 @@ namespace Contrib.Widgets.Controllers {
             var widgetPart = _widgetsService.CreateWidget(layer.Id, widgetType, "", "", "");
             if (widgetPart == null)
                 return HttpNotFound();
-            else
+            else if(!widgetPart.ContentItem.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&  !widgetPart.ContentItem.Has<IPublishingControlAspect>())
                 _contentManager.Publish(widgetPart.ContentItem);
 
             var contentItem = _services.ContentManager.Get(hostId, VersionOptions.Latest);
@@ -132,7 +152,7 @@ namespace Contrib.Widgets.Controllers {
                 _services.TransactionManager.Cancel();
                 return View((object)model);
             }
-
+            conditionallyPublish(widgetPart.ContentItem);
             _services.Notifier.Information(T("Your {0} has been added.", widgetPart.TypeDefinition.DisplayName));
             return Redirect(returnUrl);
         }
@@ -160,10 +180,26 @@ namespace Contrib.Widgets.Controllers {
                 return Redirect(returnUrl);
             }
         }
+        [HttpPost, ActionName("EditWidget")]
+        [Orchard.Mvc.FormValueRequired("submit.Publish")]
+        public ActionResult EditWidgetPublishPOST( int hostId, int id) {
+            return EditWidgetPost(hostId, id, contentItem => {
+                _services.ContentManager.Publish(contentItem);
+            });
+        }
 
         [HttpPost, ActionName("EditWidget")]
         [Orchard.Mvc.FormValueRequired("submit.Save")]
-        public ActionResult EditWidgetSavePost(int hostId, int id) {
+        public ActionResult EditWidgetSavePOST( int hostId, int id) {
+            return EditWidgetPost(hostId, id, contentItem => {
+                if (!contentItem.Has<IPublishingControlAspect>() && !contentItem.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable)
+                    _services.ContentManager.Publish(contentItem);
+            });
+        }
+
+        //[HttpPost, ActionName("EditWidget")]
+        //[Orchard.Mvc.FormValueRequired("submit.Save")]
+        public ActionResult EditWidgetPost(int hostId, int id, Action<ContentItem> conditionallyPublish) {
             if (!IsAuthorizedToManageWidgets())
                 return new HttpUnauthorizedResult();
 
@@ -186,7 +222,7 @@ namespace Contrib.Widgets.Controllers {
                     _services.TransactionManager.Cancel();
                     return View(model);
                 }
-
+                conditionallyPublish(widgetPart.ContentItem);
                 _services.Notifier.Information(T("Your {0} has been saved.", widgetPart.TypeDefinition.DisplayName));
             } catch (Exception exception) {
                 Logger.Error(T("Editing widget failed: {0}", exception.Message).Text);
@@ -226,7 +262,7 @@ namespace Contrib.Widgets.Controllers {
         }
 
         private bool IsAuthorizedToManageWidgets() {
-            return _services.Authorizer.Authorize(Permissions.ManageWidgets, T("Not authorized to manage widgets"));
+            return _services.Authorizer.Authorize(Permissions.ManageContainerWidgets, T("Not authorized to manage container widgets"));
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

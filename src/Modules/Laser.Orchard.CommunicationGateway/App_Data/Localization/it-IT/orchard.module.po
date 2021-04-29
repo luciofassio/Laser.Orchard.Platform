@@ -1,5 +1,5 @@
-# Orchard resource strings - it-IT
-# Copyright (c) 2018 Laser s.r.l.
+﻿# Orchard resource strings - it-IT
+# Copyright (c) 2021 Laser s.r.l.
 
 
 # > #: msgctxt { contesto del messaggio - Originale }
@@ -384,6 +384,38 @@ msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/ContactsAdmin/View.c
 msgid "View Contact"
 msgstr "Visualizza contatto"
 
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Audiences ids"
+msgstr "Id delle Audiences"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Insert Required Policies."
+msgstr "Inserisci le Policies richieste."
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Member e-mail"
+msgstr "Email del contatto"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Notifier front-end verbosity"
+msgstr "Verbosity delle notifiche a front-end"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Notify subscription result"
+msgstr "Invia una notifica per i risultati delle iscrizioni"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Payload Example:"
+msgstr "Esempio di payload:"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Put payload"
+msgstr "Payload per la richiesta PUT"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/DefinitionTemplates/Parts/Mailchimp/MailchimpSubscriptionPartSettings.cshtml"
+msgid "Required Policies"
+msgstr "Policies obbligatorie"
+
 msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Advertising_Edit.cshtml"
 msgid "Actions to be performed:"
 msgstr "Verranno eseguite le seguenti azioni:"
@@ -411,6 +443,30 @@ msgstr "Aggiungi E-mail"
 msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/EmailContact_Edit.cshtml"
 msgid "Email"
 msgstr "Email"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSiteSettings.cshtml"
+msgid "An ApiKey needs to be set!"
+msgstr "Bisogna impostare una ApiKey!"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSiteSettings.cshtml"
+msgid "Current ApiKey (BASE64):"
+msgstr "ApiKey attuale (BASE64):"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSiteSettings.cshtml"
+msgid "Default Audience"
+msgstr "Audience di default"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSubscription_Edit.cshtml"
+msgid "An audience need to be set."
+msgstr "Bisogna impostare un'Audience."
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSubscription_Edit.cshtml"
+msgid "I want to subscribe to {0}"
+msgstr "Voglio registrarmi a {0}"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/Mailchimp/MailchimpSubscription_Edit.cshtml"
+msgid "Mailchimp subscription"
+msgstr "Iscrizione a Mailchimp"
 
 msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/EditorTemplates/Parts/QueryFilter.cshtml"
 msgid "Query List"
@@ -467,6 +523,34 @@ msgstr "Digita un numero di telefono"
 msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/Fields/ContentPickerField-CommunicationContact-AdminFilter.cshtml"
 msgid "Content"
 msgstr "Contenuto"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "(Select a type)"
+msgstr "(Selezionare un tipo)"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Api Call type"
+msgstr "Tipo di chiamata Api"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Http VERB"
+msgstr "Verbo HTTP"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Insert Required Policies."
+msgstr "Inserisci le Policies richieste."
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Payload"
+msgstr "Payload"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Required Policies"
+msgstr "Policies obbligatorie"
+
+msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/MailchimpAPICallEdit.cshtml"
+msgid "Url"
+msgstr "Url"
 
 msgctxt "~/Modules/Laser.Orchard.CommunicationGateway/Views/Parts/CommunicationContact.cshtml"
 msgid "Logs"
@@ -561,6 +645,10 @@ msgid "Couldn't create content"
 msgstr "Non è stato possibile creare il contenuto"
 
 msgctxt "Laser.Orchard.CommunicationGateway.Controllers.AdvertisingExternalController"
+msgid "Create Advertising Id: {0} - Title: {1}"
+msgstr "Creare Comunicato Id: {0} - Titolo: {1}"
+
+msgctxt "Laser.Orchard.CommunicationGateway.Controllers.AdvertisingExternalController"
 msgid "Creating CommunicationAdvertising failed: {0}"
 msgstr "Creazione del Comunicato non riuscita: {0}"
 
@@ -628,6 +716,78 @@ msgctxt "Laser.Orchard.CommunicationGateway.Controllers.ContactsAdminController"
 msgid "Synchronization started. Please come back on this page in a few minutes to check the result."
 msgstr "Sincronizzazione avviata. Accedi a questa pagina tra pochi minuti per visualizzarne l'esito."
 
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Activities.APICallActivity"
+msgid "Calls Mailchimp API"
+msgstr "Chiamata ad una API Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Activities.APICallActivity"
+msgid "Failed"
+msgstr "Fallito"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Activities.APICallActivity"
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Activities.APICallActivity"
+msgid "Succeeded"
+msgstr "Riuscito"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.MailchimpSiteSettingsHandler"
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "Nice to meet you! Your subscription has been accepted."
+msgstr "Lieto di fare la tua conoscenza! La tua iscrizione è stat accettata."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "Oops! We have experienced a problem during your email subscription. Please, retry later."
+msgstr "Oops! C'è stato un problema durante la registrazione della tua email. Per favore, riprova più tardi."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "You have been unsubscribed."
+msgstr "La tua iscrizione è stata rimossa."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "You have to accept all required policies in order to subscribe to the newsletter."
+msgstr "Per potersi iscrivere alla newsletter è necessario accettare tutte le policies obbligatorie."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.UserEventHandler"
+msgid "Nice to meet you! Your subscription has been accepted."
+msgstr "Lieto di fare la tua conoscenza! La tua iscrizione è stat accettata."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.UserEventHandler"
+msgid "Oops! We are currently experienced a problem during your email subscription. Please, retry later."
+msgstr "Oops! C'è stato un problema durante la registrazione della tua email. Per favore, riprova più tardi."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Handlers.UserEventHandler"
+msgid "Wait... it seems you have not accepted all our required policies. Your account has been verified, but your email have not been subscribed. Please, retry after having accepted our policies."
+msgstr "Aspetta... pare tu non abbia accettato tutte le policies richieste. Il tuo account è stato verificato, ma la tua email non è stata registrata. Per favore, riprova dopo avere accettato le nostre policies."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "Converts a string to a Mailchimp subscriber hash"
+msgstr "Converte una stringa in un hash di un sottoscrittore di Mailchimp (Mailchimp subscriber hash)"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "Gets the Mailchimp default audience defined as site settings."
+msgstr "Recupera l'audience Mailchimp di default così come definita dalle impostazioni del sito."
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "Mailchimp default audience"
+msgstr "Audience Mailchimp di default"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "Mailchimp text tokens"
+msgstr "Tokens di testo per Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.CRM.Mailchimp.Tokens.MailchimpTextTokens"
+msgid "To Mailchimp hash"
+msgstr "Converti in un hash per Mailchimp"
+
 msgctxt "Laser.Orchard.CommunicationGateway.Drivers.CommunicationAdvertisingPartDriver"
 msgid "AdvertisingPart Error"
 msgstr "Errore sul comunicato"
@@ -659,6 +819,22 @@ msgstr "Esportazione contatti - Errore:"
 msgctxt "Laser.Orchard.CommunicationGateway.Handlers.ExportContactTaskHandler"
 msgid "File {0} already exist"
 msgstr "Il file {0} è già presente"
+
+msgctxt "Laser.Orchard.CommunicationGateway.Mailchimp.Handlers.MailchimpSiteSettingsHandler"
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgctxt "Laser.Orchard.CommunicationGateway.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "Nice to meet you! Your subscription has been accepted."
+msgstr "Lieto di fare la tua conoscenza! La tua iscrizione è stat accettata."
+
+msgctxt "Laser.Orchard.CommunicationGateway.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "Oops! We have experienced a problem during your email subscription. Please, retry later."
+msgstr "Oops! C'è stato un problema durante la registrazione della tua email. Per favore, riprova più tardi."
+
+msgctxt "Laser.Orchard.CommunicationGateway.Mailchimp.Handlers.MailchimpSubscriptionPartHandler"
+msgid "You have to accept all required policies in order to subscribe to the newsletter."
+msgstr "Devi accettare tutte le policies obbligatorie per registrati alla newsletter."
 
 msgctxt "Laser.Orchard.CommunicationGateway.Navigation.AdminMenu"
 msgid "Campaign"

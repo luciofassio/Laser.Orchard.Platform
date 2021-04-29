@@ -24,6 +24,7 @@ namespace Laser.Orchard.Translator.Controllers
             Log = NullLogger.Instance;
         }
 
+        private readonly string[] _validContainerTypes = new string[] { "A", "M", "T" };
         [System.Web.Mvc.HttpPost]
         public bool AddRecords([FromBody] List<TranslationRecord> records)
         {
@@ -49,10 +50,18 @@ namespace Laser.Orchard.Translator.Controllers
                                                                                               && r.Message == record.Message
                                                                                               && r.Language == record.Language);
                     var tryAddOrUpdateTranslation = true;
-                    if (alreadyExistingRecords.Any()) {
+                    if (alreadyExistingRecords.Any())
+                    {
                         // verifica maiuscole/minuscole del message
-                        if(record.Message.Equals(alreadyExistingRecords.First().Message, StringComparison.InvariantCulture)) {
-                            tryAddOrUpdateTranslation = false;
+                        // aggiunto il for perchè nel caso in cui ci fosse più di una traduzione uguale 
+                        // con differenza di maiuscolo o minuscole deve  effettuare il controllo su tutte
+                        foreach (var item in alreadyExistingRecords)
+                        {
+                            if (record.Message.Equals(item.Message, StringComparison.InvariantCulture))
+                            {
+                                tryAddOrUpdateTranslation = false;
+                                break;
+                            }
                         }
                     }
                     if (tryAddOrUpdateTranslation)
@@ -70,12 +79,26 @@ namespace Laser.Orchard.Translator.Controllers
                 var folderList = records.GroupBy(g => new { g.ContainerName, g.ContainerType })
                                             .Select(g => new { g.Key.ContainerName, g.Key.ContainerType });
 
+                if (folderList.Any(f => !_validContainerTypes.Contains(f.ContainerType))) {
+                    Log.Error("TranslatorAPIController.AddRecords error - Some record has invalid ContainerType");
+                    return false;
+                }
                 foreach (var folder in folderList)
                 {
-                    if (folder.ContainerType == "M")
-                        _translatorServices.EnableFolderTranslation(folder.ContainerName, ElementToTranslate.Module);
-                    else if (folder.ContainerType == "T")
-                        _translatorServices.EnableFolderTranslation(folder.ContainerName, ElementToTranslate.Theme);
+                    var folderType = ElementToTranslate.Module;
+                    switch (folder.ContainerType) {
+                        case "M":
+                            folderType = ElementToTranslate.Module;
+                            break;
+                        case "T":
+                            folderType = ElementToTranslate.Theme;
+                            break;
+                        case "A":
+                            folderType = ElementToTranslate.Tenant;
+                            break;
+                    }
+                    _translatorServices.EnableFolderTranslation(folder.ContainerName, folderType);
+
                 }
 
                 return true;

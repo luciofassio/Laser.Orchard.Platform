@@ -34,10 +34,11 @@ namespace Laser.Orchard.Mobile.Controllers {
                 if (manualRecipients == null || manualRecipients.Length == 0) {
                     elenco = _pushGatewayService.GetPushQueryResult(ids, true, contentId.HasValue ? contentId.Value : 0);
                 } else {
-                    elenco = _pushGatewayService.GetPushQueryResultByUserNames(manualRecipients, null, true, "All", true);
+                    elenco = _pushGatewayService.CountPushQueryResultByUserNames(manualRecipients, null, true, "All");
                 }
                 var android = Convert.ToInt64((((Hashtable)(elenco[0]))["Android"]) ?? 0); //elenco.Where(x => x.Device == TipoDispositivo.Android).Count();
                 var apple = Convert.ToInt64((((Hashtable)(elenco[0]))["Apple"]) ?? 0);  //elenco.Where(x => x.Device == TipoDispositivo.Apple).Count();
+                 apple += Convert.ToInt64((((Hashtable)(elenco[0]))["AppleFCM"]) ?? 0);
                 var win = Convert.ToInt64((((Hashtable)(elenco[0]))["WindowsMobile"]) ?? 0);  //elenco.Where(x => x.Device == TipoDispositivo.WindowsMobile).Count();
                 Total.Add("Value", string.Format("{0:#,##0} (<i class=\"fa fa-android\"></i> {1:#,##0}, <i class=\"fa fa-apple\"></i> {2:#,##0}, <i class=\"fa fa-windows\"></i> {3:#,##0})", ((long)(((Hashtable)(elenco[0]))["Tot"])), android, apple, win));
             }

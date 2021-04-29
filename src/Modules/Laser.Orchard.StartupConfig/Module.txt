@@ -5,8 +5,8 @@ Website: http://www.laser-group.com
 Version: 1.8
 OrchardVersion: 1.8
 Description: Laser Framework that enables many general features
-Dependencies: Orchard.MediaLibrary, Orchard.Fields, Orchard.ContentPicker, Orchard.Localization, Orchard.Modules, Orchard.Tokens ,Orchard.Roles
-Category: Administration
+Dependencies: Orchard.MediaLibrary, Orchard.Fields, Orchard.ContentPicker, Orchard.Localization, Orchard.Modules, Orchard.Resources, Orchard.Tokens ,Orchard.Roles
+Category: Admin
 Features:
     Laser.Orchard.StartupConfig.UriCultureSelector:
         Name: Laser Uri Culture selector
@@ -20,9 +20,9 @@ Features:
 		Dependencies: 
 	Laser.Orchard.StartupConfig.MediaExtensions:
 		Name: Laser Media Extension
-		Description: Expose a route to transform images
+		Description: Expose a route to transform images and enable the ability to manage the owned default folder for a user
 		Category: Media
-		Dependencies: Orchard.MediaProcessing
+		Dependencies: Orchard.MediaLibrary,Orchard.MediaProcessing
 	Laser.Orchard.StartupConfig.WorkflowExtensions:
 		Name: Laser Workflow Extension
 		Description: Expose useful functions for workflows
@@ -35,9 +35,9 @@ Features:
 		Dependencies: Orchard.Projections
 	Laser.Orchard.StartupConfig.TaxonomiesExtensions:
 		Name: Laser Taxonomies Extensions
-		Description: Make Taxonomies fully integrated with localization
+		Description: Make Taxonomies fully integrated with localization and adds advanced query filters.
 		Category: Content
-		Dependencies: Orchard.Taxonomies, Orchard.Localization, Contents, Laser.Orchard.StartupConfig, Orchard.Taxonomies.LocalizationExtensions
+		Dependencies: Orchard.Taxonomies, Orchard.Localization, Contents, Laser.Orchard.StartupConfig, Orchard.Taxonomies.LocalizationExtensions, Orchard.Forms, Orchard.Projections, Orchard.Tokens
 	Laser.Orchard.StartupConfig.PermissionExtension:
 		Name: Laser Permission Extensions
 		Description: Enable Permission and Group Management
@@ -58,3 +58,36 @@ Features:
 		Description: Part to show and edit a data table in json format
 		Category: Content
 		Dependencies: Laser.Orchard.StartupConfig
+	Laser.Orchard.StartupConfig.ExtendAdminControllerToFrontend
+		Name: Laser Extend Admin Controller To Frontend
+		Description: Replicate some admin controller to Frontend
+		Category: Frontend
+	Laser.Orchard.StartupConfig.ContentPickerContentCreation
+		Name: Content Picker Field Content Creation
+		Description: Enable feature to create contents when using a Content Picker Field
+		Category: Content
+		Dependencies: Orchard.ContentPicker, Laser.Orchard.StartupConfig
+	Laser.Orchard.StartupConfig.TinyMceEnhancement
+		Name: TinyMce Enhancement
+		Description: Enable feature to customize TinyMce
+		Category: Content
+		Dependencies: TinyMce, Laser.Orchard.StartupConfig
+	Laser.Orchard.StartupConfig.CacheEvictorPart
+		Name: Laser CacheEvictor Part
+		Description: Part for cache evict
+		Category: Content
+		Dependencies: Laser.Orchard.StartupConfig
+	Laser.Orchard.BearerTokenAuthentication
+		Name: Bearer Token Authentication for Orchard
+		Description: Enables using Bearer Tokens to authenticate users
+		Category: Security
+		Dependencies: Orchard.Users
+	Laser.Orchard.StartupConfig.FrontendEditorConfiguration
+		Name: FrontendEditorConfiguration
+		Description: Options to edit content items on frontend.
+		Category: Content
+		Dependencies: Orchard.CustomForms
+	Laser.Orchard.ApplePay.DomainAssociation
+		Name: ApplePay Domain Association
+        Description: Enable the merchant domains verification.
+		Category: Payments

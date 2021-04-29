@@ -98,8 +98,11 @@ namespace Laser.Orchard.OpenAuthentication.Services {
                 // se non è noto il provider richiama il RewriteRequest di tutti i client registrati
                 RewriteRequest();
             }
-
-            return SecurityManager(ProviderName).VerifyAuthentication(returnUrl);
+            if (string.IsNullOrEmpty(ProviderName)) {
+                return AuthenticationResult.Failed;
+            }
+            var manager = SecurityManager(ProviderName);
+            return manager.VerifyAuthentication(returnUrl);
         }
 
 

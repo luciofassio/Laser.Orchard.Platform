@@ -18,6 +18,8 @@ namespace Laser.Orchard.StartupConfig.RazorCodeExecution.Services {
         string RunString(string key, string code, Object model, Dictionary<string, object> dicdvb = null, string Layout = null);
 
         string RunFile(string localFilePath, RazorModelContext model);
+        string CompileFile(string localFilePath);
+
 
         //   void AddLayout(string key, string code);
 
@@ -45,10 +47,8 @@ namespace Laser.Orchard.StartupConfig.RazorCodeExecution.Services {
             return listOldCached;
         }
 
-        public IRazorEngineService RazorEngineServiceStatic
-        {
-            get
-            {
+        public IRazorEngineService RazorEngineServiceStatic {
+            get {
                 if (_razorEngine == null) {
                     StartNewRazorEngine();
                 }
@@ -100,17 +100,24 @@ namespace Laser.Orchard.StartupConfig.RazorCodeExecution.Services {
                     // key puo' essere un nome ("caso customtemplate") o un file con tutta la path (caso fieldexternal)
                     string defFileName = key;
                     try {
-                        defFileName= Path.GetFileName(key);
+                        defFileName = Path.GetFileName(key);
                     }
                     catch { }
                     if (string.IsNullOrEmpty(defFileName))
                         defFileName = key;
                     defFileName = System.IO.Path.GetTempPath() + defFileName + ".cshtml";
-                    code = "@{System.Diagnostics.Debugger.Break();}" + code;
+                    // add a breakpoint so we can debug the templates
+                    code = 
+                        "@{"
+                        +   "if (System.Diagnostics.Debugger.IsAttached) {"
+                        +     "System.Diagnostics.Debugger.Break();"
+                        +   "}"
+                        + "}" 
+                        + code;
                     File.WriteAllText(defFileName, code);
-                   
+
                     RazorEngineServiceStatic.AddTemplate(key, new LoadedTemplateSource(code, defFileName));
-                   // Debugger.Break();
+                    // Debugger.Break();
 
 #else
                     RazorEngineServiceStatic.AddTemplate(key, new LoadedTemplateSource(code, null));
@@ -125,6 +132,42 @@ namespace Laser.Orchard.StartupConfig.RazorCodeExecution.Services {
             return RazorEngineServiceStatic.Run(key, null, (Object)model, dvb);
         }
 
+        public string CompileFile(string localFilePath) {
+            try {
+                string key = "Test" + Guid.NewGuid();
+                if (File.Exists(localFilePath)) {
+                    DateTime d = System.IO.File.GetLastWriteTime(localFilePath);
+                    key += d.ToShortDateString() + d.ToLongTimeString();
+                }
+
+                string myfile2 = HostingEnvironment.MapPath("~/") + @"App_Data\Sites\common.cshtml";
+                if (File.Exists(myfile2)) {
+                    // add the date of common.cshtml to the key, to update the file even if only the common has changed and not just the file
+                    DateTime d2 = System.IO.File.GetLastWriteTime(myfile2);
+                    key += d2.ToShortDateString() + d2.ToLongTimeString();
+                }
+
+                string codeTemplate = "";
+                if (!RazorEngineServiceStatic.IsTemplateCached(key, null)) {
+                    if (System.IO.File.Exists(localFilePath)) {
+                        codeTemplate = File.ReadAllText(myfile2) + File.ReadAllText(localFilePath);
+                        if (!string.IsNullOrEmpty(codeTemplate)) {
+                            RazorEngineServiceStatic.AddTemplate(key, new LoadedTemplateSource(codeTemplate, localFilePath));
+                            RazorEngineServiceStatic.Compile(key, null);
+                            listCached.Add(localFilePath);
+                        }
+                        else
+                            return "";
+                    }
+                    else
+                        return "";
+                }
+                return "";
+            }
+            catch (Exception ex) {
+                return ex.Message;
+            }
+        }
         public string RunFile(string localFilePath, RazorModelContext model) {
             string key = localFilePath;
             /*
@@ -166,6 +209,8 @@ namespace Laser.Orchard.StartupConfig.RazorCodeExecution.Services {
             else
                 return "";
         }
+
+
     }
 
 

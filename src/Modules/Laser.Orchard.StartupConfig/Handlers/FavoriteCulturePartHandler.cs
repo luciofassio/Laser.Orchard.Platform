@@ -7,17 +7,20 @@ using Orchard.ContentManagement.Handlers;
 using Orchard.Data;
 using Orchard.Localization.Records;
 using Orchard;
+using Laser.Orchard.StartupConfig.Services;
 
 namespace Laser.Orchard.StartupConfig.Handlers {
-    public class FavoriteCulturePartHandler: ContentHandler {
+    public class FavoriteCulturePartHandler : ContentHandler {
 
-        IRepository<CultureRecord> _cultureRepository;
+        ICommonsServices _commonService;
         IOrchardServices _orchardService;
-        public FavoriteCulturePartHandler(IRepository<FavoriteCulturePartRecord> repository, IRepository<CultureRecord> cultureRepository, IOrchardServices orchardService) {
-            _cultureRepository = cultureRepository;
+        public FavoriteCulturePartHandler(IRepository<FavoriteCulturePartRecord> repository, ICommonsServices commonService, IOrchardServices orchardService) {
+            _commonService = commonService;
             _orchardService = orchardService;
 
             Filters.Add(StorageFilter.For(repository));
+
+            OnCreated<FavoriteCulturePart>((context, part) => CreateCulture(part));
 
             OnUpdated<FavoriteCulturePart>((context, part) => UpdateCulture(part));
 
@@ -25,32 +28,32 @@ namespace Laser.Orchard.StartupConfig.Handlers {
         }
 
         private void LoadCulture(FavoriteCulturePart part) {
-          var culturerecord=  _cultureRepository.Table.Where(r => r.Id == part.Culture_Id).ToList().FirstOrDefault();
-            if (culturerecord != null)
-                part.Culture = culturerecord.Culture;
+            var culture = _commonService.ListCultures().SingleOrDefault(x => x.Id == part.Culture_Id);
+            if (culture != null)
+                part.Culture = culture.Culture;
             else
-                part.Culture = _cultureRepository.Table.Where(r => r.Culture == _orchardService.WorkContext.CurrentCulture)
-                    .ToList().FirstOrDefault().Culture;
+                part.Culture = _orchardService.WorkContext.CurrentCulture;
         }
 
         private void UpdateCulture(FavoriteCulturePart part) {
-            bool isSiteCulture = true;            
-            if(part.Culture != null) {
-                CultureRecord contentCulture = _cultureRepository.Table.Where(r => r.Culture == part.Culture)
-                 .ToList().FirstOrDefault();
-                if (contentCulture != null) {
-                    isSiteCulture = false;
-                    part.Culture = contentCulture.Culture;
-                    part.Culture_Id = contentCulture.Id;
-                }               
-            } 
+            if (string.IsNullOrWhiteSpace(part.Culture)) {
+                var culture = _commonService.ListCultures().SingleOrDefault(x => x.Culture == _orchardService.WorkContext.CurrentCulture);
+                part.Culture = culture != null ? culture.Culture : "";
+                part.Culture_Id = culture != null ? culture.Id: 0;
+            }
+            else {
+                var culture = _commonService.ListCultures().SingleOrDefault(x => x.Culture == part.Culture);
+                part.Culture = culture != null ? culture.Culture : "";
+                part.Culture_Id = culture != null ? culture.Id : 0;
+            }
+        }
 
-            if(isSiteCulture){
-                CultureRecord siteCulture = _cultureRepository.Table.Where(r => r.Culture == _orchardService.WorkContext.CurrentCulture)
-                    .ToList().FirstOrDefault();
-                part.Culture_Id = siteCulture.Id;
-                part.Culture = siteCulture.Culture;
-
+        private void CreateCulture(FavoriteCulturePart part) {
+            var lang = _orchardService.WorkContext.CurrentCulture;
+            if (!string.IsNullOrWhiteSpace(lang)) {
+                var culture = _commonService.ListCultures().SingleOrDefault(x => x.Culture == lang);
+                part.Culture = culture != null ? culture.Culture : "";
+                part.Culture_Id = culture != null ? culture.Id : 0;
             }
         }
     }

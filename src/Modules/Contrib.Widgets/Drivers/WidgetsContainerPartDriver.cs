@@ -47,8 +47,7 @@ namespace Contrib.Widgets.Drivers {
 
         private dynamic New { get; set; }
 
-        protected override string Prefix
-        {
+        protected override string Prefix {
             get { return "WidgetsContainer"; }
         }
 
@@ -61,12 +60,14 @@ namespace Contrib.Widgets.Drivers {
 
             var widgetParts = _widgetManager.GetWidgets(part.Id, part.ContentItem.IsPublished());
 
-            if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
-                widgetParts = widgetParts.Where(x => settings.AllowedWidgets.Split(',').Contains(x.TypeDefinition.Name));
-
-            if (!string.IsNullOrWhiteSpace(settings.AllowedZones))
-                widgetParts = widgetParts.Where(x => settings.AllowedZones.Split(',').Contains(x.Zone));
-
+            if (!settings.UseHierarchicalAssociation) {
+                if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
+                    widgetParts = widgetParts.Where(x => settings.AllowedWidgets.Split(',').Contains(x.TypeDefinition.Name));
+                if (!string.IsNullOrWhiteSpace(settings.AllowedZones))
+                    widgetParts = widgetParts.Where(x => settings.AllowedZones.Split(',').Contains(x.Zone));
+            } else if (settings.HierarchicalAssociation != null && settings.HierarchicalAssociation.Count() > 0) {
+                widgetParts = widgetParts.Where(wp => settings.HierarchicalAssociation.Any(z => z.ZoneName.Equals(wp.Zone) && z.Widgets.Any(w => w.WidgetType == wp.TypeDefinition.Name || w.WidgetType == "All")));
+            }
             // Build and add shape to zone.
             var workContext = _wca.GetContext();
             var zones = workContext.Layout.Zones;
@@ -84,12 +85,17 @@ namespace Contrib.Widgets.Drivers {
 
                 var currentTheme = _siteThemeService.GetSiteTheme();
                 var currentThemesZones = _widgetsService.GetZones(currentTheme).ToList();
-                if (!string.IsNullOrWhiteSpace(settings.AllowedZones))
-                    currentThemesZones = currentThemesZones.Where(x => settings.AllowedZones.Split(',').Contains(x)).ToList();
-
                 var widgetTypes = _widgetsService.GetWidgetTypeNames().ToList();
-                if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
-                    widgetTypes = widgetTypes.Where(x => settings.AllowedWidgets.Split(',').Contains(x)).ToList();
+                if (!settings.UseHierarchicalAssociation) {
+                    if (!string.IsNullOrWhiteSpace(settings.AllowedZones))
+                        currentThemesZones = currentThemesZones.Where(x => settings.AllowedZones.Split(',').Contains(x)).ToList();
+                    if (!string.IsNullOrWhiteSpace(settings.AllowedWidgets))
+                        widgetTypes = widgetTypes.Where(x => settings.AllowedWidgets.Split(',').Contains(x)).ToList();
+                } else if (settings.HierarchicalAssociation != null && settings.HierarchicalAssociation.Count() > 0) {
+                    currentThemesZones = currentThemesZones.Where(ctz => settings.HierarchicalAssociation.Select(x => x.ZoneName).Contains(ctz)).ToList();
+                    widgetTypes = widgetTypes.Where(w => settings.HierarchicalAssociation.Any(x => x.Widgets.Any(a => a.WidgetType == w || a.WidgetType == "All"))).ToList();
+                }
+
                 var widgets = _widgetManager.GetWidgets(part.Id, false);
 
                 var zonePreviewImagePath = string.Format("{0}/{1}/ThemeZonePreview.png", currentTheme.Location, currentTheme.Id);
@@ -106,8 +112,7 @@ namespace Contrib.Widgets.Drivers {
                             lp.Culture != null && !string.IsNullOrWhiteSpace(lp.Culture.Culture))
                         .OrderBy(o => o.Culture.Culture)
                         .ToList();
-                }
-                catch {
+                } catch {
                     contentLocalizations = null;
                 }
 
@@ -176,18 +181,18 @@ namespace Contrib.Widgets.Drivers {
 
 
 
-        protected override void Imported(WidgetsContainerPart part, ImportContentContext context) {
-            var hostId = context.Attribute(part.PartDefinition.Name, "HostId");
-            if (hostId != null) {
-                CloneWidgets(Convert.ToInt32(hostId), part.ContentItem);
-            }
-        }
+        //protected override void Imported(WidgetsContainerPart part, ImportContentContext context) {
+        //    var hostId = context.Attribute(part.PartDefinition.Name, "HostId");
+        //    if (hostId != null) {
+        //        CloneWidgets(Convert.ToInt32(hostId), part.ContentItem);
+        //    }
+        //}
 
-        protected override void Exporting(WidgetsContainerPart part, ExportContentContext context) {
-            // memorizzo l'id della pagina sorgente
-            context.Element(part.PartDefinition.Name).SetAttributeValue("HostId", part.Id.ToString());
-        }
-        
+        //protected override void Exporting(WidgetsContainerPart part, ExportContentContext context) {
+        //    // memorizzo l'id della pagina sorgente
+        //    context.Element(part.PartDefinition.Name).SetAttributeValue("HostId", part.Id.ToString());
+        //}
+
         #region [ Clone Functionality ]
 
         private void CloneWidgets(WidgetsContainerViewModel viewModel, ContentItem hostContentItem) {
@@ -236,6 +241,18 @@ namespace Contrib.Widgets.Drivers {
                     _services.ContentManager.Publish(widgetExPart.ContentItem);
                 }
 
+                // se il widget ha una LocalizationPart, la gestisco
+                var clonedLocalization = clonedContentitem.As<LocalizationPart>();
+                if (clonedLocalization != null) {
+                    clonedLocalization.Culture = destination.As<LocalizationPart>().Culture;
+                    var originalLocalization = widget.ContentItem.As<LocalizationPart>();
+                    if(originalLocalization.MasterContentItem == null) {
+                        clonedLocalization.MasterContentItem = widget.ContentItem;
+                    }
+                    else {
+                        clonedLocalization.MasterContentItem = originalLocalization.MasterContentItem;
+                    }
+                }
             }
         }
         #endregion

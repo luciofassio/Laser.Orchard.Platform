@@ -102,6 +102,8 @@ namespace Laser.Orchard.ContactForm.Services {
                                         ? string.Empty : ":" + _orchardServices.WorkContext.HttpContext.Request.Url.Port);
 
                 var smtpSettings = _orchardServices.WorkContext.CurrentSite.As<SmtpSettingsPart>();
+                var smtpLogger = new SmtpLogger();
+                ((Component)_messageManager).Logger = smtpLogger;
 
                 if (smtpSettings != null && smtpSettings.IsValid()) {
                     var mailClient = BuildSmtpClient(smtpSettings);
@@ -153,8 +155,18 @@ namespace Laser.Orchard.ContactForm.Services {
                                 var urlHelper = new UrlHelper(_orchardServices.WorkContext.HttpContext.Request.RequestContext);
 
                                 string mailSubject = "";
-                                if (useStaticSubject && !String.IsNullOrWhiteSpace(template.Subject)) mailSubject = template.Subject;
-                                else mailSubject = subject;
+                                if (useStaticSubject) /*Contatct form has been set to use a static message (in the front-end form the subject field is not displayed)*/{
+                                    if (String.IsNullOrWhiteSpace(subject) /*the ContactForm subject is empty*/
+                                    && !String.IsNullOrWhiteSpace(template.Subject)) /*the template subject is not empty*/ {
+                                        mailSubject = template.Subject;
+                                    }
+                                    else {
+                                        mailSubject = subject; //subject is set via the back-end part
+                                    }
+                                }
+                                else {
+                                    mailSubject = subject; //subject is set via the front-end textbox
+                                }
 
                                 MediaPart mediaData = new MediaPart();
                                 if (mediaid != -1) {
@@ -206,6 +218,9 @@ namespace Laser.Orchard.ContactForm.Services {
                                 }
 
                                 _messageManager.Process(data);
+                            }
+                            if (!string.IsNullOrWhiteSpace(smtpLogger.ErrorMessage)) {
+                                throw new Exception(smtpLogger.ErrorMessage, smtpLogger.Exception);
                             }
 
                             Logger.Debug(T("Contact form message sent to {0} at {1}").Text, sendTo, DateTime.Now.ToLongDateString());
@@ -307,5 +322,25 @@ namespace Laser.Orchard.ContactForm.Services {
             return validationError;
         }
 
+        private class SmtpLogger : ILogger {
+            public SmtpLogger() {
+            }
+
+            public string ErrorMessage { get; set; }
+            public Exception Exception { get; set; }
+            public bool IsEnabled(LogLevel level) {
+                return true;
+            }
+
+            public void Log(LogLevel level, Exception exception, string format, params object[] args) {
+                if (level == LogLevel.Error || level == LogLevel.Fatal) { // populate message only if the Level is Error
+                    ErrorMessage = exception == null ? format : exception.Message;
+                    Exception = exception;
+                }
+            }
+        }
+
     }
+
+    
 }

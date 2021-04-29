@@ -1,5 +1,5 @@
-# Orchard resource strings - it-IT
-# Copyright (c) 2018 Laser s.r.l.
+﻿# Orchard resource strings - it-IT
+# Copyright (c) 2021 Laser s.r.l.
 
 
 # > #: msgctxt { contesto del messaggio - Originale }
@@ -48,6 +48,14 @@ msgctxt "~/Themes/KrakeAdmin/Views/Admin/ThemeSettings.cshtml"
 msgid "type an URL for the placeholder small logo. Recommended size is 70x70."
 msgstr "digitare un URL per il logo placeholder piccolo. Dimensione consigliata 70x70."
 
+msgctxt "~/Themes/KrakeAdmin/Views/CommonMetadataLastModified.cshtml"
+msgid "by {0}"
+msgstr "di {0}"
+
+msgctxt "~/Themes/KrakeAdmin/Views/CommonMetadataLastModified.cshtml"
+msgid "unknown"
+msgstr "sconosciuto"
+
 msgctxt "~/Themes/KrakeAdmin/Views/Content.SummaryAdmin.cshtml"
 msgid "Delete"
 msgstr "Elimina"
@@ -59,6 +67,50 @@ msgstr "Modifica"
 msgctxt "~/Themes/KrakeAdmin/Views/Content.SummaryAdmin.cshtml"
 msgid "More info"
 msgstr "Mostra più informazioni"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Archive"
+msgstr "Archivia"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Delete"
+msgstr "Elimina"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Edit"
+msgstr "Modifica"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Not Published"
+msgstr "Non pubblicato"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Offline"
+msgstr "Offline"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Online"
+msgstr "Online"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Published"
+msgstr "Pubblicato"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "The page is currently offline"
+msgstr "La pagina è attualmente offline"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "The page is currently online"
+msgstr "La pagina è attualmente online"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "Unarchive"
+msgstr "Disarchivia"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Content-Order.SummaryAdmin.cshtml"
+msgid "View order"
+msgstr "Visualizza ordine"
 
 msgctxt "~/Themes/KrakeAdmin/Views/Contents/admin/ivreaterritorio_cpf_manifestazione_ruolo.cshtml"
 msgid "Add"
@@ -155,6 +207,10 @@ msgstr "Import ed Export"
 msgctxt "~/Themes/KrakeAdmin/Views/Dashboard/Admin/Index.cshtml"
 msgid "KRAKE&#8482;"
 msgstr "KRAKE&#8482;"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Dashboard/Admin/Index.cshtml"
+msgid "Mail"
+msgstr "Mail"
 
 msgctxt "~/Themes/KrakeAdmin/Views/Dashboard/Admin/Index.cshtml"
 msgid "MAIL"
@@ -286,7 +342,7 @@ msgstr "Selezionare questa checkbox per usare un campo di ricerca nella barra di
 
 msgctxt "~/Themes/KrakeAdmin/Views/Laser.Bootstrap/Admin/OptionsIndex.cshtml"
 msgid "Select this checkbox to use a sticky footer"
-msgstr "Selezionare questa checkbox per usare un footer "adesivo"."
+msgstr "Selezionare questa checkbox per usare un footer"
 
 msgctxt "~/Themes/KrakeAdmin/Views/Laser.Bootstrap/Admin/OptionsIndex.cshtml"
 msgid "Select this checkbox to use the inverse navigation color. *REQUIRES FIXED NAVIGATION BAR"
@@ -338,7 +394,7 @@ msgstr "Usare il campo di ricerca nella barra di navigazione"
 
 msgctxt "~/Themes/KrakeAdmin/Views/Laser.Bootstrap/Admin/OptionsIndex.cshtml"
 msgid "Use Sticky Footer"
-msgstr "Usare un footer "adesivo""
+msgstr "Usare un footer"
 
 msgctxt "~/Themes/KrakeAdmin/Views/Layout.cshtml"
 msgid "Are you sure you want to remove this element ?"
@@ -371,6 +427,86 @@ msgstr "Mostra:"
 msgctxt "~/Themes/KrakeAdmin/Views/Pager.cshtml"
 msgid "Showing items {0} - {1} of {2}"
 msgstr "Elementi {0} - {1} di {2}"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Clone.SummaryAdmin.cshtml"
+msgid "Clone"
+msgstr "Duplica"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Publish.SummaryAdmin.cshtml"
+msgid "Preview"
+msgstr "Anteprima"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Publish.SummaryAdmin.cshtml"
+msgid "Publish"
+msgstr "Pubblica"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Publish.SummaryAdmin.cshtml"
+msgid "Publish Draft"
+msgstr "Pubblica Bozza"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Publish.SummaryAdmin.cshtml"
+msgid "Unpublish"
+msgstr "Annulla Pubblicazione"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts.Contents.Publish.SummaryAdmin.cshtml"
+msgid "View"
+msgstr "Visualizza"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Created: {0}"
+msgstr "Creato: {0}"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Draft"
+msgstr "Bozza"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Last modified: {0}"
+msgstr "Ultima modifica: {0}"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "No Draft"
+msgstr "Nessuna Bozza"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Not Published"
+msgstr "Non pubblicato"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Offline"
+msgstr "Offline"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Online"
+msgstr "Online"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Published"
+msgstr "Pubblicato"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "Published: {0}"
+msgstr "Pubblicato: {0}"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "The page has a draft"
+msgstr "La pagina ha una bozza"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "The page is currently offline"
+msgstr "La pagina è attualmente offline"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/Common.Metadata.SummaryAdmin.cshtml"
+msgid "The page is currently online"
+msgstr "La pagina è attualmente online"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/PublishLater.Metadata.SummaryAdmin.cshtml"
+msgid "Scheduled"
+msgstr "Pianificato"
+
+msgctxt "~/Themes/KrakeAdmin/Views/Parts/PublishLater.Metadata.SummaryAdmin.cshtml"
+msgid "The page is scheduled for publishing"
+msgstr "La pagina è schedulata per la pubblicazione"
 
 msgctxt "~/Themes/KrakeAdmin/Views/RecentContentTab.cshtml"
 msgid "Add Selected"
@@ -423,6 +559,10 @@ msgstr "Progetto Krake"
 msgctxt "~/Themes/KrakeAdmin/Views/Title.cshtml"
 msgid "Your site"
 msgstr "Il tuo sito"
+
+msgctxt "~/Themes/KrakeAdmin/Views/User.cshtml"
+msgid "Change Password"
+msgstr "Cambia password"
 
 msgctxt "~/Themes/KrakeAdmin/Views/User.cshtml"
 msgid "Logout"

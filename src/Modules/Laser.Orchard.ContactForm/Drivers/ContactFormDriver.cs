@@ -11,6 +11,8 @@ using Orchard.ContentManagement.Handlers;
 using System.Xml.Linq;
 using Orchard.Data;
 using Laser.Orchard.TemplateManagement.Models;
+using Orchard.ContentManagement.MetaData.Models;
+using System;
 
 namespace Laser.Orchard.ContactForm.Drivers {
     public class ContactFormDriver : ContentPartCloningDriver<ContactFormPart> {
@@ -20,17 +22,32 @@ namespace Laser.Orchard.ContactForm.Drivers {
         private readonly INotifier _notifier;
         private readonly IRepository<TemplatePartRecord> _repositoryTemplatePartRecord;
         private readonly IContentManager _contentManager;
+        private readonly IFrontEndEditService _frontEndEditService;
 
         public Localizer T { get; set; }
 
-        public ContactFormDriver(IUtilsServices utilsServices, INotifier notifier, IStorageProvider storageProvider, 
-            IRepository<TemplatePartRecord> repositoryTemplatePartRecord, IContentManager contentManager) {
+        public ContactFormDriver(
+            IUtilsServices utilsServices, 
+            INotifier notifier, 
+            IStorageProvider storageProvider, 
+            IRepository<TemplatePartRecord> repositoryTemplatePartRecord, 
+            IContentManager contentManager,
+            IFrontEndEditService frontEndProfileService) {
+
             _contentManager = contentManager;
             _storageProvider = storageProvider;
             _utilsServices = utilsServices;
             _notifier = notifier;
             _repositoryTemplatePartRecord = repositoryTemplatePartRecord;
+            _frontEndEditService = frontEndProfileService;
         }
+
+        Func<ContentTypePartDefinition, string, bool> OnlyShowReCaptcha = 
+            (ctpd, typeName) => 
+                ctpd.PartDefinition.Name == "ReCaptchaPart";
+        Func<ContentPartFieldDefinition, bool> NoFields =
+            (ctpd) =>
+                false;
 
         /// <summary>
         /// Defines the shapes required for the part's main view.
@@ -47,11 +64,21 @@ namespace Laser.Orchard.ContactForm.Drivers {
                 viewModel.ShowNameField = part.DisplayNameField;
                 viewModel.RequireNameField = part.RequireNameField;
                 viewModel.EnableFileUpload = part.EnableUpload;
+                viewModel.AcceptPolicy = part.AcceptPolicy;
+                viewModel.AcceptPolicyText = part.AcceptPolicyText;
+                viewModel.AcceptPolicyUrl = part.AcceptPolicyUrl;
+                viewModel.AcceptPolicyUrlText = part.AcceptPolicyUrlText;
+                return ContentShape("Parts_ContactForm",
+                    () => shapeHelper.Parts_ContactForm(
+                        ContactForm: viewModel,
+                        AdditionalShape: _frontEndEditService.BuildFrontEndShape(
+                            _contentManager.BuildEditor(part),
+                            OnlyShowReCaptcha,
+                            NoFields)
+                        ));
+
             }
-            return ContentShape("Parts_ContactForm",
-                () => shapeHelper.Parts_ContactForm(
-                    ContactForm: viewModel
-                    ));
+            return null; // don't display if display type is not "detail"
         }
 
         /// <summary>
@@ -119,6 +146,11 @@ namespace Laser.Orchard.ContactForm.Drivers {
             root.SetAttributeValue("RequireNameField", part.RequireNameField);
             root.SetAttributeValue("StaticSubjectMessage", part.StaticSubjectMessage);
             root.SetAttributeValue("UseStaticSubject", part.UseStaticSubject);
+            root.SetAttributeValue("ThankyouPage", part.ThankyouPage);
+            root.SetAttributeValue("AcceptPolicy", part.AcceptPolicy);
+            root.SetAttributeValue("AcceptPolicyUrl", part.AcceptPolicyUrl);
+            root.SetAttributeValue("AcceptPolicyUrlText", part.AcceptPolicyUrlText);
+            root.SetAttributeValue("AcceptPolicyText", part.AcceptPolicyText);
             if (part.TemplateRecord_Id > 0) 
             {
                 //cerco il corrispondente valore dell' identity dalla parts del template e lo associo al campo Layout 
@@ -167,6 +199,27 @@ namespace Laser.Orchard.ContactForm.Drivers {
             if (UseStaticSubject != null) {
                 part.UseStaticSubject = bool.Parse(UseStaticSubject.Value);
             }
+            var ThankyouPage = root.Attribute("ThankyouPage");
+            if (ThankyouPage != null) {
+                part.ThankyouPage = ThankyouPage.Value;
+            }
+            var AcceptPolicy = root.Attribute("AcceptPolicy");
+            if (UseStaticSubject != null) {
+                part.AcceptPolicy = bool.Parse(AcceptPolicy.Value);
+            }
+            var AcceptPolicyUrl = root.Attribute("AcceptPolicyUrl");
+            if (AcceptPolicyUrl != null) {
+                part.AcceptPolicyUrl = AcceptPolicyUrl.Value;
+            }
+            var AcceptPolicyUrlText = root.Attribute("AcceptPolicyUrlText");
+            if (AcceptPolicyUrlText != null) {
+                part.AcceptPolicyUrlText = AcceptPolicyUrlText.Value;
+            }
+            var AcceptPolicyText = root.Attribute("AcceptPolicyText");
+            if (AcceptPolicyText != null) {
+                part.AcceptPolicyText = AcceptPolicyText.Value;
+            }
+
             context.ImportAttribute(part.PartDefinition.Name, "TemplateRecord_Id", (x) => {
                 var template = context.GetItemFromSession(x);
                 if (template != null && template.Has<TemplatePart>()) {
@@ -187,6 +240,11 @@ namespace Laser.Orchard.ContactForm.Drivers {
             clonePart.AttachFiles = originalPart.AttachFiles;
             clonePart.PathUpload = originalPart.PathUpload;
             clonePart.RequireAttachment = originalPart.RequireAttachment;
+            clonePart.ThankyouPage = originalPart.ThankyouPage;
+            clonePart.AcceptPolicy = originalPart.AcceptPolicy;
+            clonePart.AcceptPolicyUrl = originalPart.AcceptPolicyUrl;
+            clonePart.AcceptPolicyUrlText = originalPart.AcceptPolicyUrlText;
+            clonePart.AcceptPolicyText = originalPart.AcceptPolicyText;
         }
     }
 }

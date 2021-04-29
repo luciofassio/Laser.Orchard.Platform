@@ -1,5 +1,5 @@
-# Orchard resource strings - it-IT
-# Copyright (c) 2018 Laser s.r.l.
+﻿# Orchard resource strings - it-IT
+# Copyright (c) 2021 Laser s.r.l.
 
 
 # > #: msgctxt { contesto del messaggio - Originale }
@@ -41,8 +41,16 @@ msgid "Enable File Upload"
 msgstr "Abilita Caricamento File"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "I have read and agree to the "
+msgstr "Ho letto e accetto"
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "If checked, an upload button will be added to the form."
 msgstr "Se selezionato, un bottone di caricamento verrà aggiunto al form."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "If not checked, a 'Subject' field will display on the form. Tokens: {DOMAIN}, {NAME}.<br/>If checked and the above textbox is empty, the subject specified in the template will be used otherwise the above textbox value will be used as the email subject. If no template is specified, the subject specified in the textbox above will be used."
+msgstr "Se non selezionato verrà mostrato sul form a front-end un campo Oggetto. Tokens: {DOMAIN},{NAME}.<br/>Se selezionato e la textbox viene lasciata vuota, verrà utilizzato come oggetto della mail l'oggetto specificato all'interno del template, altrimenti verrà utilizzato come oggetto della mail il testo della textbox. Se non viene selezionato alcun template di email, sarà utilizzato come oggetto il testo presente nella textbox."
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "If not checked, a 'Subject' field will display on the form. Tokens: {DOMAIN}, {NAME}.<br/>If checked, the subject specified in the template will be used. If no template is specified, the subject specified in the textbox above will be used."
@@ -61,8 +69,20 @@ msgid "If this option is not checked, instead of attaching the file to the email
 msgstr "Se questa opzione non è selezionata, invece di allegare i file alla email il loro URL verrà aggiunto al testo del messaggio."
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Insert a thank you page"
+msgstr "inserire una pagina di ringraziamento"
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "Mail Template"
 msgstr "Template dell'Email"
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Policy Url."
+msgstr "Url delle policy."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Privacy Policy"
+msgstr "Politica di Privacy"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "Recipient Email Address"
@@ -79,6 +99,18 @@ msgstr "Rendi Obbligatorio il Campo 'Nome'"
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "Specify one or more destination addresses separated by a semicolon."
 msgstr "Specificare uno o più indirizzi di destinazione separati da punto e virgola."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Specify text before accept policy."
+msgstr "Specificare il testo antecedente l'accettazione delle politiche di privacy."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Text with link."
+msgstr "Testo con link."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "Thank you page Url."
+msgstr "Url della pagina di ringraziamento."
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "The email address of the sender"
@@ -113,6 +145,10 @@ msgid "Use Same Subject for All Emails"
 msgstr "Usa lo Stesso Oggetto per Tutte le Email"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
+msgid "User will have to accept policies before submit a message."
+msgstr "L'utente dovrà accettare le politiche di privacy prima di inoltrare il messaggio."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/EditorTemplates/Parts/ContactForm.cshtml"
 msgid "Variables passed to the template through the model:"
 msgstr "Variabili passate al template attraverso il modello:"
 
@@ -126,7 +162,7 @@ msgstr "Sfoglia"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/FileUpload/Add.cshtml"
 msgid "The file \"{0}\" has been uploaded!"
-msgstr "Il file \"{0}\" è stato inviato!"
+msgstr "Il file \"{0}\" è stato caricato!"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/FileUpload/Add.cshtml"
 msgid "Upload"
@@ -169,6 +205,10 @@ msgid "Name"
 msgstr "Nome"
 
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/Parts/ContactForm.cshtml"
+msgid "Privacy Policy must be accepted."
+msgstr "Le politiche di privacy devono essere accettate."
+
+msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/Parts/ContactForm.cshtml"
 msgid "Send"
 msgstr "Inoltra"
 
@@ -183,6 +223,30 @@ msgstr "Carica file"
 msgctxt "~/Modules/Laser.Orchard.ContactForm/Views/Parts/ContactForm.cshtml"
 msgid "Your Name"
 msgstr "Il Vostro Nome"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedEvent"
+msgid "A contact form is submitted"
+msgstr "È stato compilato e inviato un form di contatto"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedEvent"
+msgid "Done"
+msgstr "Fatto"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedEvent"
+msgid "Marketing"
+msgstr "Marketing"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedForm"
+msgid "Any"
+msgstr "Qualsiasi"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedForm"
+msgid "Contact Forms - Contents"
+msgstr "Form di contatto - Contenuti"
+
+msgctxt "Laser.Orchard.ContactForm.Activity.ContactFormSubmittedForm"
+msgid "Select any contact form. If the contact form is not in the list, you need to add the IdentityPart and valorize it."
+msgstr "Selezionare un form di contatto. Se il form di contatto non è presente in lista, è necessario aggiungere e valorizzare l'IdentityPart sul relativo tipo di contenuto."
 
 msgctxt "Laser.Orchard.ContactForm.Controllers.ContactFormDriver"
 msgid "The destination folder for the uploaded files has been succesfully created!"
